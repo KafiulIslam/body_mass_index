@@ -1,4 +1,5 @@
 import 'package:body_mass_index/common/custom_orientation_builder.dart';
+import 'package:body_mass_index/common/height_slider.dart';
 import 'package:body_mass_index/common/input_card.dart';
 import 'package:body_mass_index/common/primary_button.dart';
 import 'package:body_mass_index/model/calculating_bmi.dart';
@@ -12,6 +13,7 @@ import '../constant/pixel_ratio.dart';
 //width: 414
 
 class InputScreen extends StatefulWidget {
+
   const InputScreen({Key? key}) : super(key: key);
 
   static const String name = 'Input_screen';
@@ -22,10 +24,20 @@ class InputScreen extends StatefulWidget {
 
 class _InputScreenState extends State<InputScreen> {
 
-  int height = 180;
+
+  int heightInFoot = 5;
+  int heightInInch = 5;
   int weight = 50;
   int age = 20;
   int cardColorCode = 0;
+
+
+  int changeFootToInc() {
+    int height;
+    int  heightInFootToInc = (heightInFoot * 12) ;
+    height = (heightInFootToInc + heightInInch) ;
+    return height;
+  }
 
 
 
@@ -65,7 +77,8 @@ class _InputScreenState extends State<InputScreen> {
                 buttonTitle: 'Calculate',
                 onTap: () {
 
-                  BMICalculator calc = BMICalculator(height: height, weight: weight);
+                  BMICalculator calc = BMICalculator(height: changeFootToInc(), weight: weight);
+
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return ResultScreen(
                       bmiResult: calc.calculateBMI(),
@@ -115,7 +128,7 @@ class _InputScreenState extends State<InputScreen> {
                 buttonTitle: 'Calculate',
                 onTap: () {
 
-                  BMICalculator calc = BMICalculator(height: height, weight: weight);
+                  BMICalculator calc = BMICalculator(height: changeFootToInc(), weight: weight);
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return ResultScreen(
                       bmiResult: calc.calculateBMI(),
@@ -246,6 +259,7 @@ class _InputScreenState extends State<InputScreen> {
 
 
   Widget _buildSliderPortrait(BuildContext context) {
+
     final heightRatio = MediaQuery.of(context).size.height;
     final widthRatio = MediaQuery.of(context).size.width;
 
@@ -265,45 +279,104 @@ class _InputScreenState extends State<InputScreen> {
                 textStyle: TextStyle(
                     fontSize: heightRatio / twentyFivePixelRatioH, color: ass)),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                height.toString(),
-                style: GoogleFonts.roboto(
-                    textStyle: TextStyle(
-                        fontSize: heightRatio / twentyPixelRatioH,
-                        color: white,
-                        fontWeight: FontWeight.w700)),
+
+          Container(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+              SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  activeTrackColor: white,
+                  inactiveTrackColor: ass,
+                  thumbColor: buttonColor,
+                  overlayColor: Color(0x29EB1555),
+                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
+                ),
+                child: Slider(
+                    value: heightInFoot.toDouble(),
+                    min: 2.0,
+                    max: 10.0,
+                    onChanged: (double userInput) {
+                      setState(() {
+                        heightInFoot = userInput.round();
+                      });
+                    }),
               ),
-              Text(
-                'cm',
-                style: TextStyle(
-                    fontSize: heightRatio / twelvePixelRatioH, color: ass),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    heightInFoot.toString(),
+                    style: GoogleFonts.roboto(
+                        textStyle: TextStyle(
+                            fontSize: heightRatio / twentyPixelRatioH,
+                            color: white,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  Text(
+                    ' Foot',
+                    style: TextStyle(
+                        fontSize: heightRatio / sixteenPixelRatioH, color: ass,fontWeight: FontWeight.w900),
+                  ),
+                ],
               ),
-            ],
+
+            ],),
           ),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              activeTrackColor: white,
-              inactiveTrackColor: ass,
-              thumbColor: buttonColor,
-              overlayColor: Color(0x29EB1555),
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
-            ),
-            child: Slider(
-                value: height.toDouble(),
-                min: 100.0,
-                max: 200.0,
-                onChanged: (double userInput) {
-                  setState(() {
-                    height = userInput.round();
-                  });
-                }),
+
+          Container(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    activeTrackColor: white,
+                    inactiveTrackColor: ass,
+                    thumbColor: buttonColor,
+                    overlayColor: Color(0x29EB1555),
+                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
+                  ),
+                  child: Slider(
+                      value: heightInInch.toDouble(),
+                      min: 1.0,
+                      max: 11.0,
+                      onChanged: (double userInput) {
+                        setState(() {
+                          heightInInch = userInput.round();
+                        });
+                      }),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      heightInInch.toString(),
+                      style: GoogleFonts.roboto(
+                          textStyle: TextStyle(
+                              fontSize: heightRatio / twentyPixelRatioH,
+                              color: white,
+                              fontWeight: FontWeight.w700)),
+                    ),
+                    Text(
+                      ' Inch',
+                      style: TextStyle(
+                          fontSize: heightRatio / sixteenPixelRatioH, color: ass,fontWeight: FontWeight.w900),
+                    ),
+                  ],
+                ),
+
+              ],),
           ),
+
+
         ],
       ),
     );
@@ -329,44 +402,102 @@ class _InputScreenState extends State<InputScreen> {
                 textStyle: TextStyle(
                     fontSize: widthRatio / twentyFivePixelRatioH * 2, color: ass)),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                height.toString(),
-                style: GoogleFonts.roboto(
-                    textStyle: TextStyle(
-                        fontSize: widthRatio / twentyPixelRatioH * 2,
-                        color: white,
-                        fontWeight: FontWeight.w700)),
-              ),
-              Text(
-                'cm',
-                style: TextStyle(
-                    fontSize: widthRatio / twelvePixelRatioH * 2, color: ass),
-              ),
-            ],
+          Container(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    activeTrackColor: white,
+                    inactiveTrackColor: ass,
+                    thumbColor: buttonColor,
+                    overlayColor: Color(0x29EB1555),
+                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
+                  ),
+                  child: Slider(
+                      value: heightInFoot.toDouble(),
+                      min: 2.0,
+                      max: 10.0,
+                      onChanged: (double userInput) {
+                        setState(() {
+                          heightInFoot = userInput.round();
+                        });
+                      }),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      heightInFoot.toString(),
+                      style: GoogleFonts.roboto(
+                          textStyle: TextStyle(
+                              fontSize: heightRatio / twentyPixelRatioH,
+                              color: white,
+                              fontWeight: FontWeight.w700)),
+                    ),
+                    Text(
+                      ' Foot',
+                      style: TextStyle(
+                          fontSize: heightRatio / sixteenPixelRatioH, color: ass,fontWeight: FontWeight.w900),
+                    ),
+                  ],
+                ),
+
+              ],),
           ),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              activeTrackColor: white,
-              inactiveTrackColor: ass,
-              thumbColor: buttonColor,
-              overlayColor: const Color(0x29EB1555),
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
-            ),
-            child: Slider(
-                value: height.toDouble(),
-                min: 100.0,
-                max: 200.0,
-                onChanged: (double userInput) {
-                  setState(() {
-                    height = userInput.round();
-                  });
-                }),
+
+
+
+          Container(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    activeTrackColor: white,
+                    inactiveTrackColor: ass,
+                    thumbColor: buttonColor,
+                    overlayColor: Color(0x29EB1555),
+                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
+                  ),
+                  child: Slider(
+                      value: heightInInch.toDouble(),
+                      min: 1.0,
+                      max: 11.0,
+                      onChanged: (double userInput) {
+                        setState(() {
+                          heightInInch = userInput.round();
+                        });
+                      }),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      heightInInch.toString(),
+                      style: GoogleFonts.roboto(
+                          textStyle: TextStyle(
+                              fontSize: heightRatio / twentyPixelRatioH,
+                              color: white,
+                              fontWeight: FontWeight.w700)),
+                    ),
+                    Text(
+                      ' Inch',
+                      style: TextStyle(
+                          fontSize: heightRatio / sixteenPixelRatioH, color: ass),
+                    ),
+                  ],
+                ),
+
+              ],),
           ),
         ],
       ),

@@ -11,7 +11,7 @@ class BMICalculator {
 
 
   String calculateBMI() {
-  double  heightInMeter = (height / 100) ;
+  double  heightInMeter = ( height / 39.37007874016 ) ;
     _bmi = weight / pow(heightInMeter, 2)  ;
     return _bmi.toStringAsFixed(2);
   }
