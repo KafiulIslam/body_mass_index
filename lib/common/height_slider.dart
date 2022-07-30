@@ -3,12 +3,21 @@ import 'package:google_fonts/google_fonts.dart';
 import '../constant/color.dart';
 import '../constant/pixel_ratio.dart';
 
-
 class HeightSlider extends StatefulWidget {
-
-  late  int height;
+  late int height;
   final String? title;
-    HeightSlider({Key? key,   this.height = 5,this.title}) : super(key: key);
+  final double minValue;
+  final double maxValue;
+  late Function? onChanged;
+
+  HeightSlider(
+      {Key? key,
+      this.height = 5,
+      this.title,
+      required this.minValue,
+      required this.maxValue,
+      this.onChanged})
+      : super(key: key);
 
   @override
   State<HeightSlider> createState() => _HeightSliderState();
@@ -17,11 +26,10 @@ class HeightSlider extends StatefulWidget {
 class _HeightSliderState extends State<HeightSlider> {
   @override
   Widget build(BuildContext context) {
-
     final heightRatio = MediaQuery.of(context).size.height;
     final widthRatio = MediaQuery.of(context).size.width;
 
-    return  Container(
+    return Container(
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -37,13 +45,12 @@ class _HeightSliderState extends State<HeightSlider> {
             ),
             child: Slider(
                 value: widget.height.toDouble(),
-                min: 100.0,
-                max: 200.0,
+                min: widget.minValue,
+                max: widget.maxValue,
                 onChanged: (double userInput) {
-                  setState(() {
-                    widget.height = userInput.round();
-                  });
-                }),
+                 widget.height = userInput.round();
+                }
+                ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -65,8 +72,8 @@ class _HeightSliderState extends State<HeightSlider> {
               ),
             ],
           ),
-
-        ],),
+        ],
+      ),
     );
   }
 }

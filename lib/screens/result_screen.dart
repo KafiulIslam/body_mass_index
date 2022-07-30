@@ -32,60 +32,70 @@ class _ResultScreenState extends State<ResultScreen> {
     final widthRatio = MediaQuery.of(context).size.width;
 
     return CustomOrientationBuilder(
-        portrait: Scaffold(
+        portrait: SafeArea(
+          child: Scaffold(
       body: Padding(
-        padding:   EdgeInsets.symmetric(horizontal: widthRatio / thirtyTwoPixelRatioW ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-              SizedBox(height: heightRatio/sixteenPixelRatioH,),
-            Text(
-              'Result',
-              style: GoogleFonts.roboto(
-                  textStyle:   TextStyle(
-                      fontSize: heightRatio / thirtyFivePixelRatioH, color: white, fontWeight: FontWeight.w700)),
-            ),
-              SizedBox(height: heightRatio/ sixteenPixelRatioH,),
-            _buildResultBodyPortrait(context),
-              SizedBox(height: heightRatio/sixteenPixelRatioH,),
-            PrimaryButtonPortrait(
-                buttonTitle: 'Re-Calculate',
-                onTap: () {
-                  Navigator.pop(context);
-                }),
-            SizedBox(height: heightRatio/sixteenPixelRatioH,),
-
-          ],
-        ),
-      ),
-    ),
-
-        landscape: Scaffold(
-          body: Padding(
-            padding:   EdgeInsets.symmetric(horizontal: widthRatio / thirtyTwoPixelRatioW ),
+          padding:   EdgeInsets.symmetric(horizontal: widthRatio / thirtyTwoPixelRatioW, ),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: widthRatio/sixteenPixelRatioH * 2,),
+                  SizedBox(height: heightRatio/sixteenPixelRatioH,),
                 Text(
                   'Result',
                   style: GoogleFonts.roboto(
                       textStyle:   TextStyle(
-                          fontSize: widthRatio / thirtyFivePixelRatioH * 2, color: white, fontWeight: FontWeight.w700)),
+                          fontSize: heightRatio / thirtyFivePixelRatioH, color: white, fontWeight: FontWeight.w700)),
                 ),
-                SizedBox(height: widthRatio/ sixteenPixelRatioH * 2,),
-                _buildResultBodyLandscape(context),
-                SizedBox(height: widthRatio/sixteenPixelRatioH * 2,),
-                PrimaryButtonLandscape(
+                  SizedBox(height: heightRatio/ sixteenPixelRatioH,),
+                _buildResultBodyPortrait(context),
+                  SizedBox(height: heightRatio/sixteenPixelRatioH,),
+                PrimaryButtonPortrait(
                     buttonTitle: 'Re-Calculate',
                     onTap: () {
                       Navigator.pop(context);
                     }),
-                SizedBox(height: widthRatio/sixteenPixelRatioH * 2,),
+                SizedBox(height: heightRatio/sixteenPixelRatioH,),
 
               ],
+            ),
+          ),
+      ),
+    ),
+        ),
+
+        landscape: SafeArea(
+          child: Scaffold(
+            body: Padding(
+              padding:   EdgeInsets.symmetric(horizontal: widthRatio / thirtyTwoPixelRatioW ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: widthRatio/sixteenPixelRatioH * 2,),
+                    Text(
+                      'Result',
+                      style: GoogleFonts.roboto(
+                          textStyle:   TextStyle(
+                              fontSize: widthRatio / thirtyFivePixelRatioH * 2, color: white, fontWeight: FontWeight.w700)),
+                    ),
+                    SizedBox(height: widthRatio/ sixteenPixelRatioH * 2,),
+                    _buildResultBodyLandscape(context),
+                    SizedBox(height: widthRatio/sixteenPixelRatioH * 2,),
+                    PrimaryButtonLandscape(
+                        buttonTitle: 'Re-Calculate',
+                        onTap: () {
+                          Navigator.pop(context);
+                        }),
+                    SizedBox(height: widthRatio/sixteenPixelRatioH * 2,),
+
+                  ],
+                ),
+              ),
             ),
           ),
         )
