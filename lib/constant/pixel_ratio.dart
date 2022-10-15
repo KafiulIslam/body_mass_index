@@ -7,6 +7,7 @@ const twelvePixelRatioW = 34.5; //
 const sixteenPixelRatioW = 25.875; //
 const thirtyPixelRatioW = 13.8;  //
 const thirtyTwoPixelRatioW = 12.9375; //
+const oneTwentyPixelRatioW = 3.45;
 const oneFiftyPixelRatioW = 2.76; //
 
 
@@ -21,6 +22,7 @@ const thirtyTwoPixelRatioH = 28;  //
 const thirtyFivePixelRatioH = 25.6; //
 const fiftyPixelRatioH = 17.92;  //
 const eightyPixelRatioH = 11.2;  //
+const oneTwentyPixelRatioH = 7.466666666666667;
 const oneSixtyPixelRatioH = 5.6; //
 const oneSeventyPixelRatioH = 5.5; //
 const oneNinetyPixelRatioH = 4.7; //

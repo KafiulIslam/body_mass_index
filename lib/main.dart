@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'constant/color.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -22,12 +22,12 @@ class MyApp extends StatelessWidget {
         primaryColor: brandColor,
         scaffoldBackgroundColor: brandColor,
       ),
-
-      home: const CustomSplashScreen(),
-      // AnimatedSplashScreen(
-      //     splash: Image.asset('assets/images/bmi_app_logo.png'),
-      //     splashTransition: SplashTransition.scaleTransition,
-      //     nextScreen: const InputScreen()),
+      home: AnimatedSplashScreen(
+          duration: 1000,
+          splash: 'assets/images/bmi_app_logo.png',
+          nextScreen: const InputScreen(),
+          splashTransition: SplashTransition.scaleTransition,
+          backgroundColor: Colors.white),
     );
   }
 }

@@ -61,8 +61,7 @@ class _InputScreenState extends State<InputScreen> {
               padding: EdgeInsets.symmetric(
                   horizontal: widthRatio / thirtyTwoPixelRatioW),
               child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
+                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildGenderRowPortrait(context),
@@ -145,7 +144,6 @@ class _InputScreenState extends State<InputScreen> {
   Widget _buildGenderRowPortrait(BuildContext context) {
     final heightRatio = MediaQuery.of(context).size.height;
     final widthRatio = MediaQuery.of(context).size.width;
-
     return Column(
       children: [
         SizedBox(
@@ -518,32 +516,24 @@ class _InputScreenState extends State<InputScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InputCardPortrait(
-              decreasingTap: () {
-                setState(() {
-                  weight--;
-                });
-              },
-              increasingTap: () {
-                setState(() {
-                  weight++;
-                });
-              },
+              sliderMaxValue: 200,
               number: weight,
               title: 'Weight',
+              onChanged: (double userInput) {
+                setState(() {
+                  weight = userInput.round();
+                });
+              }
             ),
             InputCardPortrait(
-              decreasingTap: () {
-                setState(() {
-                  age--;
-                });
-              },
-              increasingTap: () {
-                setState(() {
-                  age++;
-                });
-              },
+              sliderMaxValue: 120,
               number: age,
               title: 'Age',
+                onChanged: (double userInput) {
+                  setState(() {
+                    age = userInput.round();
+                  });
+                }
             ),
           ],
         ),
@@ -582,4 +572,5 @@ class _InputScreenState extends State<InputScreen> {
       ],
     );
   }
+
 }

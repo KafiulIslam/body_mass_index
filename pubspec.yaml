@@ -29,12 +29,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  go_router: ^4.0.0
   google_fonts: ^3.0.1
   animated_splash_screen: ^1.2.0
   flutter_svg: ^1.1.0
   flutter_launcher_icons: ^0.9.3
   rename: any
+  sleek_circular_slider: ^2.0.1
 
 
 flutter_icons:

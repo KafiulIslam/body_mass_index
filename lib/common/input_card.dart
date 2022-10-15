@@ -1,6 +1,7 @@
 import 'package:body_mass_index/common/plus_minus_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import '../constant/color.dart';
 import '../constant/pixel_ratio.dart';
 
@@ -12,19 +13,19 @@ class InputCardPortrait extends StatefulWidget {
   final Color cardColor;
   final Color iconColor;
   final Color titleColor;
-  late VoidCallback? decreasingTap;
-  late VoidCallback? increasingTap;
+  final void Function(double)? onChanged;
+  final double sliderMaxValue;
 
   InputCardPortrait({Key? key,
       this.icon,
       this.title,
       this.cardType,
       this.number = 10,
-        this.decreasingTap ,
-      this.increasingTap,
       this.cardColor = inactiveCardColor,
       this.iconColor = ass,
-      this.titleColor = ass
+      this.titleColor = ass,
+    this.onChanged,
+    this.sliderMaxValue = 200,
       })
       : super(key: key);
 
@@ -64,50 +65,83 @@ class _InputCardPortraitState extends State<InputCardPortrait> {
                 ),
               ],
             )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          : Stack(
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(
-                  widget.number.toString(),
-                  style: GoogleFonts.roboto(
-                    textStyle:   TextStyle(
-                        fontSize: heightRatio / twentyFivePixelRatioH,
-                        color: white,
-                        fontWeight: FontWeight.w700),
+                Center(
+            child: SizedBox(
+              height: heightRatio / oneTwentyPixelRatioH,
+              width: widthRatio / oneTwentyPixelRatioW,
+              child: SleekCircularSlider(
+                max: widget.sliderMaxValue,
+              min: 10,
+              appearance: CircularSliderAppearance(
+                customWidths: CustomSliderWidths(
+                  trackWidth: 4,
+                  progressBarWidth: 6,
+                  handlerSize: 10,
+                ),
+                customColors: CustomSliderColors(
+                  trackColor: ass,
+                  progressBarColor: white,
+                  dotColor: buttonColor,
+                  hideShadow: true,
+
+                ),
+              ),
+                  onChange: widget.onChanged,
+                  ),
+            ),
+          ),
+                Center(
+                  child: Text(
+                    widget.number.toString(),
+                    style: GoogleFonts.roboto(
+                      textStyle:   TextStyle(
+                          fontSize: heightRatio / twentyFivePixelRatioH,
+                          color: white,
+                          fontWeight: FontWeight.w700),
+                    ),
                   ),
                 ),
-                Padding(
-                  padding:   EdgeInsets.symmetric(horizontal: widthRatio / eightPixelRatioW),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                          onTap:  widget.decreasingTap,
-                          child: PlusMinusButton(
-                            child: Container(
-                              height: heightRatio / twoPixelRatioH,
-                              width: widthRatio / twelvePixelRatioW,
-                              color: brandColor,
-                            ),
-                          )),
-                      GestureDetector(
-                          onTap: widget.increasingTap,
-                          child: PlusMinusButton(
-                              child: Icon(
-                            Icons.add,
-                            size: heightRatio / twentyFivePixelRatioH,
-                            color: brandColor,
-                          ))),
-                    ],
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: Text(
+                      widget.title!,
+                      style: GoogleFonts.roboto(
+                        textStyle:   TextStyle(
+                            fontSize: heightRatio/twentyFivePixelRatioH, color: ass, fontWeight: FontWeight.w700),
+                      ),
+                    ),
                   ),
                 ),
-                Text(
-                  widget.title!,
-                  style: GoogleFonts.roboto(
-                    textStyle:   TextStyle(
-                        fontSize: heightRatio/twentyFivePixelRatioH, color: ass, fontWeight: FontWeight.w700),
-                  ),
-                ),
+                // Padding(
+                //   padding:   EdgeInsets.symmetric(horizontal: widthRatio / eightPixelRatioW),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //     children: [
+                //       GestureDetector(
+                //           onTap:  widget.decreasingTap,
+                //           child: PlusMinusButton(
+                //             child: Container(
+                //               height: heightRatio / twoPixelRatioH,
+                //               width: widthRatio / twelvePixelRatioW,
+                //               color: brandColor,
+                //             ),
+                //           )),
+                //       GestureDetector(
+                //           onTap: widget.increasingTap,
+                //           child: PlusMinusButton(
+                //               child: Icon(
+                //             Icons.add,
+                //             size: heightRatio / twentyFivePixelRatioH,
+                //             color: brandColor,
+                //           ))),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
     );
