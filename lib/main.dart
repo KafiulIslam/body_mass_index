@@ -1,5 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:body_mass_index/screens/custom_splash_screen.dart';
+import 'package:body_mass_index/common/custom_splash_screen.dart';
 import 'package:body_mass_index/screens/input_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

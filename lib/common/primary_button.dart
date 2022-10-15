@@ -23,7 +23,7 @@ class PrimaryButtonPortrait extends StatelessWidget {
         height: heightRatio / fiftyPixelRatioH,
         width: double.infinity,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(widthRatio / thirtyTwoPixelRatioW), color: buttonColor),
+            borderRadius: BorderRadius.circular(widthRatio / twelvePixelRatioW), color: buttonColor),
         child: Text(buttonTitle!,style: GoogleFonts.roboto(
           textStyle:   TextStyle(fontSize: heightRatio / twentyFivePixelRatioH,color: white,fontWeight: FontWeight.w700, ),
         ),),

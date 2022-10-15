@@ -1,3 +1,5 @@
+import 'package:body_mass_index/common/custom_appbar.dart';
+import 'package:body_mass_index/common/custom_card.dart';
 import 'package:body_mass_index/common/custom_orientation_builder.dart';
 import 'package:body_mass_index/common/height_slider.dart';
 import 'package:body_mass_index/common/input_card.dart';
@@ -45,18 +47,7 @@ class _InputScreenState extends State<InputScreen> {
     return CustomOrientationBuilder(
         portrait: SafeArea(
           child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: appBarColor,
-              centerTitle: true,
-              title: Text(
-                'BMI Meter',
-                style: GoogleFonts.roboto(
-                    textStyle: TextStyle(
-                        fontSize: heightRatio / thirtyFivePixelRatioH,
-                        color: white,
-                        fontWeight: FontWeight.w700)),
-              ),
-            ),
+            appBar: const CustomAppBar(title: 'BMI Meter',),
             body: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: widthRatio / thirtyTwoPixelRatioW),
@@ -93,18 +84,7 @@ class _InputScreenState extends State<InputScreen> {
           ),
         ),
         landscape: SafeArea(child:Scaffold(
-          appBar: AppBar(
-            backgroundColor: appBarColor,
-            centerTitle: true,
-            title: Text(
-              'BMI Meter',
-              style: GoogleFonts.roboto(
-                  textStyle: TextStyle(
-                      fontSize: widthRatio / thirtyFivePixelRatioH * 2,
-                      color: white,
-                      fontWeight: FontWeight.w700)),
-            ),
-          ),
+          appBar: const CustomAppBar(title: 'BMI Meter',),
           body: Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: widthRatio / thirtyTwoPixelRatioW),
@@ -251,14 +231,8 @@ class _InputScreenState extends State<InputScreen> {
     final heightRatio = MediaQuery.of(context).size.height;
     final widthRatio = MediaQuery.of(context).size.width;
 
-    return Container(
-      height: heightRatio / oneNinetyPixelRatioH,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(widthRatio / sixteenPixelRatioW),
-        color: inactiveCardColor,
-      ),
-      child: Column(
+    return CustomCard( cardHeight: heightRatio / oneNinetyPixelRatioH,
+        cardChild: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
@@ -267,7 +241,6 @@ class _InputScreenState extends State<InputScreen> {
                 textStyle: TextStyle(
                     fontSize: heightRatio / twentyFivePixelRatioH, color: ass)),
           ),
-
           Container(
             width: double.infinity,
             child: Row(
@@ -280,9 +253,9 @@ class _InputScreenState extends State<InputScreen> {
                     thumbColor: buttonColor,
                     overlayColor: Color(0x29EB1555),
                     thumbShape:
-                        const RoundSliderThumbShape(enabledThumbRadius: 10),
+                    const RoundSliderThumbShape(enabledThumbRadius: 10),
                     overlayShape:
-                        const RoundSliderOverlayShape(overlayRadius: 20),
+                    const RoundSliderOverlayShape(overlayRadius: 20),
                   ),
                   child: Slider(
                       value: heightInFoot.toDouble(),
@@ -331,9 +304,9 @@ class _InputScreenState extends State<InputScreen> {
                     thumbColor: buttonColor,
                     overlayColor: Color(0x29EB1555),
                     thumbShape:
-                        const RoundSliderThumbShape(enabledThumbRadius: 10),
+                    const RoundSliderThumbShape(enabledThumbRadius: 10),
                     overlayShape:
-                        const RoundSliderOverlayShape(overlayRadius: 20),
+                    const RoundSliderOverlayShape(overlayRadius: 20),
                   ),
                   child: Slider(
                       value: heightInInch.toDouble(),
@@ -370,137 +343,127 @@ class _InputScreenState extends State<InputScreen> {
               ],
             ),
           ),
-
         ],
-      ),
-    );
+      ));
   }
 
   Widget _buildSliderLandscape(BuildContext context) {
     final heightRatio = MediaQuery.of(context).size.height;
     final widthRatio = MediaQuery.of(context).size.width;
-
-    return Container(
-      height: widthRatio / oneNinetyPixelRatioH * 2,
+    return CustomCard( cardHeight: widthRatio / oneNinetyPixelRatioH * 2,
+      cardChild: Column(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: [
+    Text(
+      'Height',
+      style: GoogleFonts.roboto(
+          textStyle: TextStyle(
+              fontSize: widthRatio / twentyFivePixelRatioH * 2,
+              color: ass)),
+    ),
+    Container(
       width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(widthRatio / sixteenPixelRatioW),
-        color: inactiveCardColor,
-      ),
-      child: Column(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
-            'Height',
-            style: GoogleFonts.roboto(
-                textStyle: TextStyle(
-                    fontSize: widthRatio / twentyFivePixelRatioH * 2,
-                    color: ass)),
-          ),
-          Container(
-            width: double.infinity,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                    activeTrackColor: white,
-                    inactiveTrackColor: ass,
-                    thumbColor: buttonColor,
-                    overlayColor: Color(0x29EB1555),
-                    thumbShape:
-                    const RoundSliderThumbShape(enabledThumbRadius: 10),
-                    overlayShape:
-                    const RoundSliderOverlayShape(overlayRadius: 20),
-                  ),
-                  child: Slider(
-                      value: heightInFoot.toDouble(),
-                      min: 2.0,
-                      max: 10.0,
-                      onChanged: (double userInput) {
-                        setState(() {
-                          heightInFoot = userInput.round();
-                        });
-                      }),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text(
-                      heightInFoot.toString(),
-                      style: GoogleFonts.roboto(
-                          textStyle: TextStyle(
-                              fontSize: widthRatio / twentyPixelRatioH * 2,
-                              color: white,
-                              fontWeight: FontWeight.w700)),
-                    ),
-                    Text(
-                      ' Foot',
-                      style: TextStyle(
-                          fontSize: widthRatio / sixteenPixelRatioH * 2,
-                          color: ass,
-                          fontWeight: FontWeight.w900),
-                    ),
-                  ],
-                ),
-              ],
+          SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              activeTrackColor: white,
+              inactiveTrackColor: ass,
+              thumbColor: buttonColor,
+              overlayColor: Color(0x29EB1555),
+              thumbShape:
+              const RoundSliderThumbShape(enabledThumbRadius: 10),
+              overlayShape:
+              const RoundSliderOverlayShape(overlayRadius: 20),
             ),
+            child: Slider(
+                value: heightInFoot.toDouble(),
+                min: 2.0,
+                max: 10.0,
+                onChanged: (double userInput) {
+                  setState(() {
+                    heightInFoot = userInput.round();
+                  });
+                }),
           ),
-          Container(
-            width: double.infinity,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                    activeTrackColor: white,
-                    inactiveTrackColor: ass,
-                    thumbColor: buttonColor,
-                    overlayColor: Color(0x29EB1555),
-                    thumbShape:
-                        const RoundSliderThumbShape(enabledThumbRadius: 10),
-                    overlayShape:
-                        const RoundSliderOverlayShape(overlayRadius: 20),
-                  ),
-                  child: Slider(
-                      value: heightInInch.toDouble(),
-                      min: 0.0,
-                      max: 11.0,
-                      onChanged: (double userInput) {
-                        setState(() {
-                          heightInInch = userInput.round();
-                        });
-                      }),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text(
-                      heightInInch.toString(),
-                      style: GoogleFonts.roboto(
-                          textStyle: TextStyle(
-                              fontSize: widthRatio / twentyPixelRatioH * 2,
-                              color: white,
-                              fontWeight: FontWeight.w700)),
-                    ),
-                    Text(
-                      ' Inch',
-                      style: TextStyle(
-                          fontSize: widthRatio / sixteenPixelRatioH * 2,
-                          color: ass),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                heightInFoot.toString(),
+                style: GoogleFonts.roboto(
+                    textStyle: TextStyle(
+                        fontSize: widthRatio / twentyPixelRatioH * 2,
+                        color: white,
+                        fontWeight: FontWeight.w700)),
+              ),
+              Text(
+                ' Foot',
+                style: TextStyle(
+                    fontSize: widthRatio / sixteenPixelRatioH * 2,
+                    color: ass,
+                    fontWeight: FontWeight.w900),
+              ),
+            ],
           ),
         ],
       ),
-    );
+    ),
+    Container(
+      width: double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              activeTrackColor: white,
+              inactiveTrackColor: ass,
+              thumbColor: buttonColor,
+              overlayColor: Color(0x29EB1555),
+              thumbShape:
+              const RoundSliderThumbShape(enabledThumbRadius: 10),
+              overlayShape:
+              const RoundSliderOverlayShape(overlayRadius: 20),
+            ),
+            child: Slider(
+                value: heightInInch.toDouble(),
+                min: 0.0,
+                max: 11.0,
+                onChanged: (double userInput) {
+                  setState(() {
+                    heightInInch = userInput.round();
+                  });
+                }),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                heightInInch.toString(),
+                style: GoogleFonts.roboto(
+                    textStyle: TextStyle(
+                        fontSize: widthRatio / twentyPixelRatioH * 2,
+                        color: white,
+                        fontWeight: FontWeight.w700)),
+              ),
+              Text(
+                ' Inch',
+                style: TextStyle(
+                    fontSize: widthRatio / sixteenPixelRatioH * 2,
+                    color: ass),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  ],
+),);
   }
 
   Widget _buildWeightRowPortrait(BuildContext context) {
@@ -557,12 +520,24 @@ class _InputScreenState extends State<InputScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InputCardLandscape(
-              number: weight,
-              title: 'Weight',
+                sliderMaxValue: 200,
+                number: weight,
+                title: 'Weight',
+                onChanged: (double userInput) {
+                  setState(() {
+                    weight = userInput.round();
+                  });
+                }
             ),
             InputCardLandscape(
-              number: age,
-              title: 'Age',
+                sliderMaxValue: 120,
+                number: age,
+                title: 'Age',
+                onChanged: (double userInput) {
+                  setState(() {
+                    age = userInput.round();
+                  });
+                }
             ),
           ],
         ),
