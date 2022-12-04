@@ -511,9 +511,9 @@ class _InputScreenState extends State<InputScreen> {
                       fontWeight: FontWeight.w700),
                 ),
               ),
-              const SizedBox(height: 8,),
-              Container(
-                width: heightRatio / 4.5,
+               const SizedBox(height: 8,),
+                SizedBox(
+                width: widthRatio / 2.6,
                 child: FormBuilderDropdown<String>(
                   style: const TextStyle(color: ass,fontSize: 20),
                   dropdownColor: activeCardColor,
@@ -524,7 +524,7 @@ class _InputScreenState extends State<InputScreen> {
                     fillColor: inactiveCardColor,
                     contentPadding: EdgeInsets.all(16),
                     hintText: 'Weight',
-                    hintStyle: const TextStyle(color: ass,fontSize: 20),
+                    hintStyle: const TextStyle(color: ass,fontSize: 16),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: const BorderSide(color: Colors.transparent),
@@ -554,8 +554,8 @@ class _InputScreenState extends State<InputScreen> {
                 ),
               ),
               const SizedBox(height: 8,),
-              Container(
-                width: heightRatio / 4.5,
+              SizedBox(
+                width: widthRatio / 2.6,
                 child: FormBuilderDropdown<String>(
                   style: const TextStyle(color: ass,fontSize: 20),
                   dropdownColor: activeCardColor,
@@ -564,9 +564,9 @@ class _InputScreenState extends State<InputScreen> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: inactiveCardColor,
-                    contentPadding: EdgeInsets.all(16),
+                    contentPadding: const EdgeInsets.all(16),
                     hintText: 'Age',
-                    hintStyle: const TextStyle(color: ass,fontSize: 20),
+                    hintStyle: const TextStyle(color: ass,fontSize: 16),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: const BorderSide(color: Colors.transparent),
@@ -610,8 +610,8 @@ class _InputScreenState extends State<InputScreen> {
                 ),
               ),
               const SizedBox(height: 16,),
-              Container(
-                width: widthRatio / 4.5 * 2,
+              SizedBox(
+                width: widthRatio / 2.6,
                 child: FormBuilderDropdown<String>(
                   style: const TextStyle(color: ass,fontSize: 20),
                   dropdownColor: activeCardColor,
@@ -652,8 +652,8 @@ class _InputScreenState extends State<InputScreen> {
                 ),
               ),
               const SizedBox(height: 16,),
-              Container(
-                width: widthRatio / 4.5 * 2,
+              SizedBox(
+                width: widthRatio / 2.6,
                 child: FormBuilderDropdown<String>(
                   style: const TextStyle(color: ass,fontSize: 20),
                   dropdownColor: activeCardColor,
