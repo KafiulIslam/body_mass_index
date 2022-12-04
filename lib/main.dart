@@ -1,5 +1,4 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:body_mass_index/common/custom_splash_screen.dart';
 import 'package:body_mass_index/screens/input_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +11,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  // This widget is the root of your application.
-  @override
+   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -27,7 +25,7 @@ class MyApp extends StatelessWidget {
           splash: 'assets/images/bmi_app_logo.png',
           nextScreen: const InputScreen(),
           splashTransition: SplashTransition.scaleTransition,
-          backgroundColor: Colors.white),
+          backgroundColor: Colors.white ),
     );
   }
 }

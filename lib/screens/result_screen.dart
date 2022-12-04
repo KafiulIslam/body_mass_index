@@ -6,7 +6,6 @@ import 'package:body_mass_index/constant/pixel_ratio.dart';
 import 'package:body_mass_index/screens/expert_suggesions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../common/custom_appbar.dart';
 
 class ResultScreen extends StatefulWidget {
@@ -37,92 +36,88 @@ class _ResultScreenState extends State<ResultScreen> {
     final widthRatio = MediaQuery.of(context).size.width;
 
     return CustomOrientationBuilder(
-        portrait: SafeArea(
-          child: Scaffold(
-            appBar: const CustomAppBar(title: 'Result',),
-            body: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: widthRatio / thirtyTwoPixelRatioW,
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _buildResultBodyPortrait(context),
-                      SizedBox(
-                        height: heightRatio / thirtyTwoPixelRatioH,
-                      ),
-                      PrimaryButtonPortrait(
-                          buttonTitle: 'Consultancy',
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ExpertSuggestion(
-                                          consultantUrl:
-                                              widget.resultText == 'Normal'
-                                                  ? normalWeightConsultancy
-                                                  : widget.resultText ==
-                                                          'OverWeight'
-                                                      ? overWeightConsultancy
-                                                      : underWeightConsultancy,
-                                        )));
-                          }),
-                      SizedBox(
-                        height: heightRatio / sixteenPixelRatioH,
-                      ),
-                      PrimaryButtonPortrait(
-                          buttonTitle: 'Re-Calculate',
-                          onTap: () {
-                            Navigator.pop(context);
-                          }),
-                    ],
-                  ),
+        portrait: Scaffold(
+          appBar: const CustomAppBar(title: 'Result',),
+          body: Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: widthRatio / thirtyTwoPixelRatioW,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildResultBodyPortrait(context),
+                    SizedBox(
+                      height: heightRatio / thirtyTwoPixelRatioH,
+                    ),
+                    PrimaryButtonPortrait(
+                        buttonTitle: 'Consultancy',
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ExpertSuggestion(
+                                        consultantUrl:
+                                            widget.resultText == 'Normal'
+                                                ? normalWeightConsultancy
+                                                : widget.resultText ==
+                                                        'Over Weight'
+                                                    ? overWeightConsultancy
+                                                    : underWeightConsultancy,
+                                      )));
+                        }),
+                    SizedBox(
+                      height: heightRatio / sixteenPixelRatioH,
+                    ),
+                    PrimaryButtonPortrait(
+                        buttonTitle: 'Re-Calculate',
+                        onTap: () {
+                          Navigator.pop(context);
+                        }),
+                  ],
                 ),
               ),
             ),
           ),
         ),
-        landscape: SafeArea(
-          child: Scaffold(
-            appBar: const CustomAppBar(title: 'Result',),
-            body: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: widthRatio / thirtyTwoPixelRatioW),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _buildResultBodyLandscape(context),
-                      SizedBox(
-                        height: widthRatio / thirtyTwoPixelRatioH * 2,
-                      ),
-                      PrimaryButtonLandscape(
-                          buttonTitle: 'Consultancy',
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ExpertSuggestion(
-                                      consultantUrl:
-                                      widget.resultText == 'Normal'
-                                          ? normalWeightConsultancy
-                                          : widget.resultText ==
-                                          'OverWeight'
-                                          ? overWeightConsultancy
-                                          : underWeightConsultancy,
-                                    )));
-                          }),
-                      SizedBox(
-                        height: widthRatio / sixteenPixelRatioH * 2,
-                      ),
-                      PrimaryButtonLandscape(
-                          buttonTitle: 'Re-Calculate',
-                          onTap: () {
-                            Navigator.pop(context);
-                          }),
-                    ],
-                  ),
+        landscape: Scaffold(
+          appBar: const CustomAppBar(title: 'Result',),
+          body: Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: widthRatio / thirtyTwoPixelRatioW),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildResultBodyLandscape(context),
+                    SizedBox(
+                      height: widthRatio / thirtyTwoPixelRatioH * 2,
+                    ),
+                    PrimaryButtonLandscape(
+                        buttonTitle: 'Consultancy',
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ExpertSuggestion(
+                                    consultantUrl:
+                                    widget.resultText == 'Normal'
+                                        ? normalWeightConsultancy
+                                        : widget.resultText ==
+                                        'Over Weight'
+                                        ? overWeightConsultancy
+                                        : underWeightConsultancy,
+                                  )));
+                        }),
+                    SizedBox(
+                      height: widthRatio / sixteenPixelRatioH * 2,
+                    ),
+                    PrimaryButtonLandscape(
+                        buttonTitle: 'Re-Calculate',
+                        onTap: () {
+                          Navigator.pop(context);
+                        }),
+                  ],
                 ),
               ),
             ),

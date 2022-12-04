@@ -14,15 +14,5 @@ class PlusMinusButton extends StatelessWidget {
     final widthRatio = MediaQuery.of(context).size.width;
 
     return CircleAvatar(radius: widthRatio / sixteenPixelRatioW,backgroundColor: ass,child: child,);
-    //   Container(
-    //   alignment: Alignment.center,
-    //   height: heightRatio / thirtyPixelRatioH,
-    //   width: widthRatio / thirtyPixelRatioW,
-    //   decoration: BoxDecoration(
-    //     borderRadius: BorderRadius.circular(100),
-    //     color: ass,
-    //   ),
-    //   child:  child,
-    // );
   }
 }

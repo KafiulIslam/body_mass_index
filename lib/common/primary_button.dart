@@ -25,7 +25,7 @@ class PrimaryButtonPortrait extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(widthRatio / twelvePixelRatioW), color: buttonColor),
         child: Text(buttonTitle!,style: GoogleFonts.roboto(
-          textStyle:   TextStyle(fontSize: heightRatio / twentyFivePixelRatioH,color: white,fontWeight: FontWeight.w700, ),
+          textStyle: TextStyle(fontSize: heightRatio / twentyFivePixelRatioH,color: white,fontWeight: FontWeight.w700, ),
         ),),
       ),
     );
@@ -53,7 +53,7 @@ class PrimaryButtonLandscape extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(widthRatio / thirtyTwoPixelRatioW), color: buttonColor),
         child: Text(buttonTitle!,style: GoogleFonts.roboto(
-          textStyle:   TextStyle(fontSize: widthRatio / twentyFivePixelRatioH * 2,color: white,fontWeight: FontWeight.w700, ),
+          textStyle: TextStyle(fontSize: widthRatio / twentyFivePixelRatioH * 2,color: white,fontWeight: FontWeight.w700, ),
         ),),
       ),
     );

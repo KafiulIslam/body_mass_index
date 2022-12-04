@@ -1,12 +1,12 @@
 import 'package:body_mass_index/common/custom_appbar.dart';
 import 'package:body_mass_index/common/custom_card.dart';
 import 'package:body_mass_index/common/custom_orientation_builder.dart';
-import 'package:body_mass_index/common/height_slider.dart';
 import 'package:body_mass_index/common/input_card.dart';
 import 'package:body_mass_index/common/primary_button.dart';
 import 'package:body_mass_index/model/calculating_bmi.dart';
 import 'package:body_mass_index/screens/result_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../constant/color.dart';
 import '../constant/pixel_ratio.dart';
@@ -27,9 +27,22 @@ class _InputScreenState extends State<InputScreen> {
 
   int heightInFoot = 5;
   int heightInInch = 5;
-  int weight = 50;
-  int age = 20;
+ // int weight = 50;
+ // int age = 20;
   int cardColorCode = 0;
+  final _formKey = GlobalKey<FormBuilderState>();
+  late List<DropdownMenuItem<String>> numberList = [];
+  getNumberList(){
+    for(var i=20; i<200; i++){
+    setState(() {
+      numberList.add(DropdownMenuItem(
+        alignment: AlignmentDirectional.centerStart,
+        value: '$i',
+        child: Text('$i'),
+      ));
+    });
+    }
+  }
 
   int changeFootToInc() {
     int height;
@@ -39,51 +52,62 @@ class _InputScreenState extends State<InputScreen> {
   }
 
   @override
+  void initState() {
+    getNumberList();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     final heightRatio = MediaQuery.of(context).size.height;
     final widthRatio = MediaQuery.of(context).size.width;
 
-    return CustomOrientationBuilder(
-        portrait: SafeArea(
-          child: Scaffold(
-            appBar: const CustomAppBar(title: 'BMI Meter',),
-            body: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: widthRatio / thirtyTwoPixelRatioW),
-              child: SingleChildScrollView(
-                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildGenderRowPortrait(context),
-                    _buildSliderPortrait(context),
-                    _buildWeightRowPortrait(context),
-                    PrimaryButtonPortrait(
-                      buttonTitle: 'Calculate',
-                      onTap: () {
-                        BMICalculator calc = BMICalculator(
-                            height: changeFootToInc(), weight: weight);
+    return FormBuilder(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.disabled,
+        onChanged: () {
+      _formKey.currentState!.save();
+    },child: CustomOrientationBuilder(
+        portrait: Scaffold(
+          appBar: const CustomAppBar(title: 'BMI Meter',),
+          body: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: widthRatio / thirtyTwoPixelRatioW),
+            child: SingleChildScrollView(
+               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildGenderRowPortrait(context),
+                  _buildSliderPortrait(context),
+                  _buildWeightRowPortrait(context),
+                  PrimaryButtonPortrait(
+                    buttonTitle: 'Calculate',
+                    onTap: () {
+                      print('on tap is working');
+                      print(int.parse(_formKey.currentState?.value['weight']));
+                      BMICalculator calc = BMICalculator(
+                          height: changeFootToInc(), weight: int.parse(_formKey.currentState?.value['weight']));
 
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ResultScreen(
-                            bmiResult: calc.calculateBMI(),
-                            resultText: calc.getResult(),
-                            interpretation: calc.getInterpretation(),
-                          );
-                        }));
-                      },
-                    ),
-                    SizedBox(
-                      height: heightRatio / sixteenPixelRatioH,
-                    ),
-                  ],
-                ),
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ResultScreen(
+                          bmiResult: calc.calculateBMI(),
+                          resultText: calc.getResult(),
+                          interpretation: calc.getInterpretation(),
+                        );
+                      }));
+                    },
+                  ),
+                  SizedBox(
+                    height: heightRatio / sixteenPixelRatioH,
+                  ),
+                ],
               ),
             ),
           ),
         ),
-        landscape: SafeArea(child:Scaffold(
+        landscape: Scaffold(
           appBar: const CustomAppBar(title: 'BMI Meter',),
           body: Padding(
             padding: EdgeInsets.symmetric(
@@ -100,7 +124,7 @@ class _InputScreenState extends State<InputScreen> {
                     buttonTitle: 'Calculate',
                     onTap: () {
                       BMICalculator calc = BMICalculator(
-                          height: changeFootToInc(), weight: weight);
+                          height: changeFootToInc(), weight: int.parse(_formKey.currentState?.value['weight']));
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                             return ResultScreen(
@@ -470,40 +494,97 @@ class _InputScreenState extends State<InputScreen> {
     final heightRatio = MediaQuery.of(context).size.height;
     final widthRatio = MediaQuery.of(context).size.width;
 
-    return Column(
-      children: [
-        SizedBox(
-          height: heightRatio / thirtyTwoPixelRatioH,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InputCardPortrait(
-              sliderMaxValue: 200,
-              number: weight,
-              title: 'Weight',
-              onChanged: (double userInput) {
-                setState(() {
-                  weight = userInput.round();
-                });
-              }
-            ),
-            InputCardPortrait(
-              sliderMaxValue: 120,
-              number: age,
-              title: 'Age',
-                onChanged: (double userInput) {
-                  setState(() {
-                    age = userInput.round();
-                  });
-                }
-            ),
-          ],
-        ),
-        SizedBox(
-          height: heightRatio / thirtyTwoPixelRatioH,
-        ),
-      ],
+    return  Padding(
+      padding: EdgeInsets.symmetric(vertical: heightRatio / thirtyTwoPixelRatioH),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Weight',
+                style: GoogleFonts.roboto(
+                  textStyle: TextStyle(
+                      fontSize: heightRatio / twentyFivePixelRatioH,
+                      color: ass,
+                      fontWeight: FontWeight.w700),
+                ),
+              ),
+              const SizedBox(height: 8,),
+              Container(
+                width: heightRatio / 4.5,
+                child: FormBuilderDropdown<String>(
+                  style: const TextStyle(color: ass,fontSize: 20),
+                  dropdownColor: activeCardColor,
+                  iconEnabledColor: ass,
+                  name: 'weight',
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: inactiveCardColor,
+                    contentPadding: EdgeInsets.all(16),
+                    hintText: 'Weight',
+                    hintStyle: const TextStyle(color: ass,fontSize: 20),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Colors.transparent),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Colors.transparent),
+                    ),
+                    focusColor: white,
+                  ),
+                  items: numberList,
+                  valueTransformer: (val) => val?.toString(),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Age',
+                style: GoogleFonts.roboto(
+                  textStyle: TextStyle(
+                      fontSize: heightRatio / twentyFivePixelRatioH,
+                      color: ass,
+                      fontWeight: FontWeight.w700),
+                ),
+              ),
+              const SizedBox(height: 8,),
+              Container(
+                width: heightRatio / 4.5,
+                child: FormBuilderDropdown<String>(
+                  style: const TextStyle(color: ass,fontSize: 20),
+                  dropdownColor: activeCardColor,
+                  iconEnabledColor: ass,
+                  name: 'age',
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: inactiveCardColor,
+                    contentPadding: EdgeInsets.all(16),
+                    hintText: 'Age',
+                    hintStyle: const TextStyle(color: ass,fontSize: 20),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Colors.transparent),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Colors.transparent),
+                    ),
+                    focusColor: white,
+                  ),
+                  items: numberList,
+                  valueTransformer: (val) => val?.toString(),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -511,41 +592,99 @@ class _InputScreenState extends State<InputScreen> {
     final heightRatio = MediaQuery.of(context).size.height;
     final widthRatio = MediaQuery.of(context).size.width;
 
-    return Column(
-      children: [
-        SizedBox(
-          height: widthRatio / thirtyTwoPixelRatioH * 2,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InputCardLandscape(
-                sliderMaxValue: 200,
-                number: weight,
-                title: 'Weight',
-                onChanged: (double userInput) {
-                  setState(() {
-                    weight = userInput.round();
-                  });
-                }
-            ),
-            InputCardLandscape(
-                sliderMaxValue: 120,
-                number: age,
-                title: 'Age',
-                onChanged: (double userInput) {
-                  setState(() {
-                    age = userInput.round();
-                  });
-                }
-            ),
-          ],
-        ),
-        SizedBox(
-          height: widthRatio / thirtyTwoPixelRatioH * 2,
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: widthRatio / thirtyTwoPixelRatioH * 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Weight',
+                style: GoogleFonts.roboto(
+                  textStyle: TextStyle(
+                      fontSize: widthRatio / twentyFivePixelRatioH * 2,
+                      color: ass,
+                      fontWeight: FontWeight.w700),
+                ),
+              ),
+              const SizedBox(height: 16,),
+              Container(
+                width: widthRatio / 4.5 * 2,
+                child: FormBuilderDropdown<String>(
+                  style: const TextStyle(color: ass,fontSize: 20),
+                  dropdownColor: activeCardColor,
+                  iconEnabledColor: ass,
+                  name: 'weight',
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: inactiveCardColor,
+                    contentPadding: EdgeInsets.all(16),
+                    hintText: 'Weight',
+                    hintStyle: const TextStyle(color: ass,fontSize: 20),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Colors.transparent),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Colors.transparent),
+                    ),
+                    focusColor: white,
+                  ),
+                  items: numberList,
+                  valueTransformer: (val) => val?.toString(),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Age',
+                style: GoogleFonts.roboto(
+                  textStyle: TextStyle(
+                      fontSize: widthRatio / twentyFivePixelRatioH * 2,
+                      color: ass,
+                      fontWeight: FontWeight.w700),
+                ),
+              ),
+              const SizedBox(height: 16,),
+              Container(
+                width: widthRatio / 4.5 * 2,
+                child: FormBuilderDropdown<String>(
+                  style: const TextStyle(color: ass,fontSize: 20),
+                  dropdownColor: activeCardColor,
+                  iconEnabledColor: ass,
+                  name: 'age',
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: inactiveCardColor,
+                    contentPadding: EdgeInsets.all(16),
+                    hintText: 'Age',
+                    hintStyle: const TextStyle(color: ass,fontSize: 20),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Colors.transparent),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Colors.transparent),
+                    ),
+                    focusColor: white,
+                  ),
+                  items: numberList,
+                  valueTransformer: (val) => val?.toString(),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
+
 
 }

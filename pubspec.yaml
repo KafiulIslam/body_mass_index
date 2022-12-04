@@ -36,6 +36,7 @@ dependencies:
   rename: any
   sleek_circular_slider: ^2.0.1
   webview_flutter: ^3.0.4
+  flutter_form_builder: ^7.5.0
 
 
 

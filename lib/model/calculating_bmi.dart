@@ -17,11 +17,11 @@ class BMICalculator {
 
   String getResult() {
     if (_bmi >= 25) {
-      return 'OverWeight';
+      return 'Over Weight';
     } else if (_bmi > 18.5) {
       return 'Normal';
     } else {
-      return 'UnderWeight';
+      return 'Under Weight';
     }
   }
 

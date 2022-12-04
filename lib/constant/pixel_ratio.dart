@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 
 
 const eightPixelRatioW = 51.75; //
@@ -9,7 +7,6 @@ const thirtyPixelRatioW = 13.8;  //
 const thirtyTwoPixelRatioW = 12.9375; //
 const oneTwentyPixelRatioW = 3.45;
 const oneFiftyPixelRatioW = 2.76; //
-
 
 
 const twoPixelRatioH = 448; //
