@@ -8,8 +8,10 @@ import 'package:body_mass_index/screens/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../constant/color.dart';
 import '../constant/pixel_ratio.dart';
+import '../model/ad_helper.dart';
 
 //height: 896;
 //width: 414
@@ -27,11 +29,70 @@ class _InputScreenState extends State<InputScreen> {
 
   int heightInFoot = 5;
   int heightInInch = 5;
- // int weight = 50;
- // int age = 20;
   int cardColorCode = 0;
   final _formKey = GlobalKey<FormBuilderState>();
   late List<DropdownMenuItem<String>> numberList = [];
+  late bool _isLoading = false;
+  late BannerAd _bottomBannerAd;
+  bool _isBottomBannerAdLoaded = false;
+  InterstitialAd? _interstitialAd;
+  late int _interstitialLoadAttempts = 0;
+
+  void _createBottomBannerAd() {
+    _bottomBannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.fullBanner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isBottomBannerAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+        },
+      ),
+    );
+    _bottomBannerAd.load();
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _interstitialLoadAttempts = 0;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          _interstitialLoadAttempts ++;
+          _interstitialAd = null;
+          if( _interstitialLoadAttempts <= 3){
+            _createInterstitialAd();
+          }
+        },
+      ),
+    );
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (InterstitialAd ad) {
+          ad.dispose();
+          _createInterstitialAd();
+        },
+        onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+          ad.dispose();
+          _createInterstitialAd();
+        },
+      );
+      _interstitialAd!.show();
+    }
+  }
+
   getNumberList(){
     for(var i=20; i<200; i++){
     setState(() {
@@ -54,7 +115,16 @@ class _InputScreenState extends State<InputScreen> {
   @override
   void initState() {
     getNumberList();
+    _createBottomBannerAd();
+    _createInterstitialAd();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bottomBannerAd.dispose();
+    _interstitialAd?.dispose();
+    super.dispose();
   }
 
   @override
@@ -84,19 +154,42 @@ class _InputScreenState extends State<InputScreen> {
                   PrimaryButtonPortrait(
                     buttonTitle: 'Calculate',
                     onTap: () {
-                      print('on tap is working');
-                      print(int.parse(_formKey.currentState?.value['weight']));
-                      BMICalculator calc = BMICalculator(
-                          height: changeFootToInc(), weight: int.parse(_formKey.currentState?.value['weight']));
 
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ResultScreen(
-                          bmiResult: calc.calculateBMI(),
-                          resultText: calc.getResult(),
-                          interpretation: calc.getInterpretation(),
-                        );
-                      }));
+                      try {
+                        if (_formKey.currentState?.saveAndValidate() ??
+                            false) {
+
+                          setState(() {
+                            _isLoading = true;
+                          });
+
+                          _showInterstitialAd();
+                          BMICalculator calc = BMICalculator(
+                              height: changeFootToInc(), weight: int.parse(_formKey.currentState?.value['weight']));
+
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                                return ResultScreen(
+                                  bmiResult: calc.calculateBMI(),
+                                  resultText: calc.getResult(),
+                                  interpretation: calc.getInterpretation(),
+                                );
+                              }));
+
+                        }else{
+                          ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+                            content: Text('Please enter you weight to get your BMI result!'),
+                          ));
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                        content: Text(e.toString()),
+                      ));
+                      } finally {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
                     },
                   ),
                   SizedBox(
@@ -106,6 +199,13 @@ class _InputScreenState extends State<InputScreen> {
               ),
             ),
           ),
+          bottomNavigationBar: _isBottomBannerAdLoaded
+              ? Container(
+            height: _bottomBannerAd.size.height.toDouble(),
+            width: double.infinity,
+            child: AdWidget(ad: _bottomBannerAd),
+          )
+              : null,
         ),
         landscape: Scaffold(
           appBar: const CustomAppBar(title: 'BMI Meter',),
@@ -123,16 +223,40 @@ class _InputScreenState extends State<InputScreen> {
                   PrimaryButtonLandscape(
                     buttonTitle: 'Calculate',
                     onTap: () {
-                      BMICalculator calc = BMICalculator(
-                          height: changeFootToInc(), weight: int.parse(_formKey.currentState?.value['weight']));
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                            return ResultScreen(
-                              bmiResult: calc.calculateBMI(),
-                              resultText: calc.getResult(),
-                              interpretation: calc.getInterpretation(),
-                            );
-                          }));
+                      try {
+                        if (_formKey.currentState?.saveAndValidate() ??
+                            false) {
+
+                          setState(() {
+                            _isLoading = true;
+                          });
+
+                          BMICalculator calc = BMICalculator(
+                              height: changeFootToInc(), weight: int.parse(_formKey.currentState?.value['weight']));
+
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                                return ResultScreen(
+                                  bmiResult: calc.calculateBMI(),
+                                  resultText: calc.getResult(),
+                                  interpretation: calc.getInterpretation(),
+                                );
+                              }));
+
+                        }else{
+                          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                            content: Text('Please enter you weight to get your BMI result!'),
+                          ));
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                          content: Text(e.toString()),
+                        ));
+                      } finally {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
                     },
                   ),
                   SizedBox(
@@ -685,6 +809,5 @@ class _InputScreenState extends State<InputScreen> {
       ),
     );
   }
-
 
 }
