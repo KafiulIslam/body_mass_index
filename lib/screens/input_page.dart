@@ -163,7 +163,6 @@ class _InputScreenState extends State<InputScreen> {
                             _isLoading = true;
                           });
 
-                          _showInterstitialAd();
                           BMICalculator calc = BMICalculator(
                               height: changeFootToInc(), weight: int.parse(_formKey.currentState?.value['weight']));
 
@@ -181,6 +180,7 @@ class _InputScreenState extends State<InputScreen> {
                             content: Text('Please enter you weight to get your BMI result!'),
                           ));
                         }
+                        _showInterstitialAd();
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
                         content: Text(e.toString()),
@@ -244,10 +244,11 @@ class _InputScreenState extends State<InputScreen> {
                               }));
 
                         }else{
-                          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
                             content: Text('Please enter you weight to get your BMI result!'),
                           ));
                         }
+                        _showInterstitialAd();
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
                           content: Text(e.toString()),
@@ -266,6 +267,13 @@ class _InputScreenState extends State<InputScreen> {
               ),
             ),
           ),
+          bottomNavigationBar: _isBottomBannerAdLoaded
+              ? Container(
+            height: _bottomBannerAd.size.height.toDouble(),
+            width: double.infinity,
+            child: AdWidget(ad: _bottomBannerAd),
+          )
+              : null,
         )));
   }
 

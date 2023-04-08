@@ -3,7 +3,7 @@
     package="com.example.body_mass_index">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
    <application
         android:label="BMI Meter"
         android:name="${applicationName}"

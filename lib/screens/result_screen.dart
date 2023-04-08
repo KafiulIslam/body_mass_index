@@ -6,7 +6,9 @@ import 'package:body_mass_index/constant/pixel_ratio.dart';
 import 'package:body_mass_index/screens/expert_suggesions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../common/custom_appbar.dart';
+import '../model/ad_helper.dart';
 
 class ResultScreen extends StatefulWidget {
   final String? bmiResult;
@@ -30,8 +32,83 @@ class _ResultScreenState extends State<ResultScreen> {
   final String normalWeightConsultancy =
       'https://reverehealth.com/live-better/tips-to-maintain-a-healthy-weight/';
 
+  late BannerAd _bottomBannerAd;
+  bool _isBottomBannerAdLoaded = false;
+  InterstitialAd? _interstitialAd;
+  late int _interstitialLoadAttempts = 0;
+
+  void _createBottomBannerAd() {
+    _bottomBannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.fullBanner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isBottomBannerAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+        },
+      ),
+    );
+    _bottomBannerAd.load();
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialTwoAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _interstitialLoadAttempts = 0;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          _interstitialLoadAttempts ++;
+          _interstitialAd = null;
+          if( _interstitialLoadAttempts <= 3){
+            _createInterstitialAd();
+          }
+        },
+      ),
+    );
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (InterstitialAd ad) {
+          ad.dispose();
+          _createInterstitialAd();
+        },
+        onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+          ad.dispose();
+          _createInterstitialAd();
+        },
+      );
+      _interstitialAd!.show();
+    }
+  }
+
+  @override
+  void initState() {
+    _createBottomBannerAd();
+    _createInterstitialAd();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bottomBannerAd.dispose();
+    _interstitialAd?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+
     final heightRatio = MediaQuery.of(context).size.height;
     final widthRatio = MediaQuery.of(context).size.width;
 
@@ -48,7 +125,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   children: [
                     _buildResultBodyPortrait(context),
                     SizedBox(
-                      height: heightRatio / thirtyTwoPixelRatioH,
+                      height: heightRatio / sixteenPixelRatioH,
                     ),
                     PrimaryButtonPortrait(
                         buttonTitle: 'Consultancy',
@@ -73,12 +150,20 @@ class _ResultScreenState extends State<ResultScreen> {
                         buttonTitle: 'Re-Calculate',
                         onTap: () {
                           Navigator.pop(context);
+                          _showInterstitialAd();
                         }),
                   ],
                 ),
               ),
             ),
           ),
+          bottomNavigationBar: _isBottomBannerAdLoaded
+              ? Container(
+            height: _bottomBannerAd.size.height.toDouble(),
+            width: double.infinity,
+            child: AdWidget(ad: _bottomBannerAd),
+          )
+              : null,
         ),
         landscape: Scaffold(
           appBar: const CustomAppBar(title: 'Result',),
@@ -91,7 +176,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   children: [
                     _buildResultBodyLandscape(context),
                     SizedBox(
-                      height: widthRatio / thirtyTwoPixelRatioH * 2,
+                      height: widthRatio / sixteenPixelRatioH * 2,
                     ),
                     PrimaryButtonLandscape(
                         buttonTitle: 'Consultancy',
@@ -116,16 +201,25 @@ class _ResultScreenState extends State<ResultScreen> {
                         buttonTitle: 'Re-Calculate',
                         onTap: () {
                           Navigator.pop(context);
+                          _showInterstitialAd();
                         }),
                   ],
                 ),
               ),
             ),
           ),
+          bottomNavigationBar: _isBottomBannerAdLoaded
+              ? Container(
+            height: _bottomBannerAd.size.height.toDouble(),
+            width: double.infinity,
+            child: AdWidget(ad: _bottomBannerAd),
+          )
+              : null,
         ));
   }
 
   Widget _buildResultBodyPortrait(BuildContext context) {
+
     final heightRatio = MediaQuery.of(context).size.height;
     final widthRatio = MediaQuery.of(context).size.width;
 
@@ -241,4 +335,5 @@ class _ResultScreenState extends State<ResultScreen> {
       ),
     );
   }
+
 }
