@@ -4,9 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'constant/color.dart';
+import 'package:native_notify/native_notify.dart';
 
-void main() {
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  NativeNotify.initialize(2826, 'XLJegk2AHmAwCP2qEwYjZr', null, null);
   MobileAds.instance.initialize();
   runApp(const MyApp());
 }
