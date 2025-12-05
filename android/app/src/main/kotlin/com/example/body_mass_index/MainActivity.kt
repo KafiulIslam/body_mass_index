@@ -1,6 +1,7 @@
-package com.example.body_mass_index
+package com.bmi.meter
 
 import io.flutter.embedding.android.FlutterActivity
 
 class MainActivity: FlutterActivity() {
 }
+

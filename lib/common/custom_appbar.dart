@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../constant/color.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     Key? key,
-    this.title,
+    required this.title, // Make it required
   }) : super(key: key);
 
-  final String? title;
+  final String title; // Non-nullable
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       backgroundColor: appBarColor,
       centerTitle: true,
       title: Text(
-        title!,
+        title, // No need for ! now
         style: GoogleFonts.roboto(
             textStyle: const TextStyle(
                 fontSize: 22,
